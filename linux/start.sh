@@ -14,7 +14,7 @@ LABELS="${LABELS:-}"
 # specific user-assigned identity; without it the system-assigned identity
 # (or the only user-assigned identity bound to the host) is used.
 if [ -n "$AZURE_CLIENT_ID" ]; then
-  az login --identity --username "$AZURE_CLIENT_ID" >/dev/null
+  az login --identity --client-id "$AZURE_CLIENT_ID" >/dev/null
 else
   az login --identity >/dev/null
 fi
