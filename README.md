@@ -102,10 +102,25 @@ variables explicitly:
 docker build -t self-hosted-runner -f linux/Dockerfile .
 ```
 
+### Runner version requirements
+
+GitHub enforces a **minimum runner version of `2.329.0` to register**, and
+requires runners to stay within 30 days of the latest release to **execute**
+jobs. Enforcement began **31 July 2026** for GitHub Enterprise Cloud with data
+residency and **25 September 2026** for GitHub Enterprise Cloud. A runner below
+the registration minimum still completes `config.sh` successfully but then
+cannot connect — it appears **Offline** in the UI, with no obvious error.
+
+The image therefore tracks a recent runner (`2.336.0`) and relies on the
+runner's built-in auto-update to stay current. Auto-update downloads from
+`github.com`, so that egress must remain open even on a data residency tenant —
+without it the runner will silently drift below the minimum and stop working.
+See [the enforcement timeline](https://github.blog/changelog/2026-06-12-github-actions-minimum-version-enforcement-timeline-for-self-hosted-runners/).
+
 To pin a specific runner version:
 
 ```bash
-docker build --build-arg RUNNER_VERSION=2.321.0 -t self-hosted-runner -f linux/Dockerfile .
+docker build --build-arg RUNNER_VERSION=2.336.0 -t self-hosted-runner -f linux/Dockerfile .
 ```
 
 ## Publishing
